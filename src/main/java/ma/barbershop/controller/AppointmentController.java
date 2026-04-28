@@ -23,6 +23,7 @@ public class AppointmentController {
 
     // ---- USER endpoints ----
 
+
     @PostMapping("/user/appointments")
     public ResponseEntity<Appointment> book(
             @Valid @RequestBody BookAppointmentRequest req,

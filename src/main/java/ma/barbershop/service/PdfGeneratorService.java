@@ -27,7 +27,7 @@ public class PdfGeneratorService {
         try {
             Context ctx = new Context();
             ctx.setVariable("invoice", invoice);
-            ctx.setVariable("barber", invoice.getBarber());
+            ctx.setVariable("barber", invoice.getUserCentreSoin());
             ctx.setVariable("client", invoice.getClient());
             ctx.setVariable("lines", invoice.getLines());
             ctx.setVariable("dateFormatter", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));

@@ -29,7 +29,7 @@ public class CheckoutService {
 
     @Transactional
     public Invoice checkout(CheckoutRequest req, UserPrincipal principal) {
-        Appointment apt = appointmentRepository.findByIdAndBarberId(req.appointmentId(), principal.getBarberId())
+        Appointment apt = appointmentRepository.findByIdAndBarberId(req.appointmentId(), principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", req.appointmentId()));
 
         if (apt.getStatus() == AppointmentStatus.COMPLETED) {
@@ -62,7 +62,7 @@ public class CheckoutService {
         // Product lines
         if (req.products() != null) {
             for (CheckoutRequest.ProductLineItem item : req.products()) {
-                Product product = productRepository.findByIdAndBarberId(item.productId(), principal.getBarberId())
+                Product product = productRepository.findByIdAndBarberId(item.productId(), principal.getUserCentreSoinId())
                         .orElseThrow(() -> new ResourceNotFoundException("Product", item.productId()));
 
                 if (product.getStockQuantity() < item.quantity()) {
@@ -105,11 +105,11 @@ public class CheckoutService {
         BigDecimal total = subtotal.add(taxAmount);
 
         // Invoice number
-        String invoiceNumber = generateInvoiceNumber(principal.getBarberId());
+        String invoiceNumber = generateInvoiceNumber(principal.getUserCentreSoinId());
 
         Invoice invoice = Invoice.builder()
                 .appointment(apt)
-                .barber(apt.getBarber())
+                .userCentreSoin(apt.getUserCentreSoin())
                 .client(apt.getClient())
                 .invoiceNumber(invoiceNumber)
                 .issuedAt(LocalDateTime.now())

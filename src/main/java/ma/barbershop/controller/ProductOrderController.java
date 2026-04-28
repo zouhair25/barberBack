@@ -24,7 +24,7 @@ import java.util.*;
 public class ProductOrderController {
 
     private final ProductOrderRepository orderRepository;
-    private final BarberProfileRepository barberProfileRepository;
+    private final UserCentreSoinRepository userCentreSoinRepository;
     private final SupplierRepository supplierRepository;
     private final ProductRepository productRepository;
     private final StockMovementRepository stockMovementRepository;
@@ -35,7 +35,7 @@ public class ProductOrderController {
             @RequestParam(defaultValue = "20") int size,
             @AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(orderRepository
-                .findByBarberIdOrderByOrderDateDesc(principal.getBarberId(), PageRequest.of(page, size)));
+                .findByBarberIdOrderByOrderDateDesc(principal.getUserCentreSoinId(), PageRequest.of(page, size)));
     }
 
     @PostMapping
@@ -44,11 +44,11 @@ public class ProductOrderController {
             @Valid @RequestBody ProductOrderRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        BarberProfile barber = barberProfileRepository.findById(principal.getBarberId()).orElseThrow();
+        UserCentreSoin barber = userCentreSoinRepository.findById(principal.getUserCentreSoinId()).orElseThrow();
 
         Supplier supplier = null;
         if (req.supplierId() != null) {
-            supplier = supplierRepository.findByIdAndBarberId(req.supplierId(), principal.getBarberId())
+            supplier = supplierRepository.findByIdAndBarberId(req.supplierId(), principal.getUserCentreSoinId())
                     .orElseThrow(() -> new ResourceNotFoundException("Supplier", req.supplierId()));
         }
 
@@ -65,7 +65,7 @@ public class ProductOrderController {
                 .build();
 
         for (ProductOrderRequest.OrderLine l : req.lines()) {
-            Product product = productRepository.findByIdAndBarberId(l.productId(), principal.getBarberId())
+            Product product = productRepository.findByIdAndBarberId(l.productId(), principal.getUserCentreSoinId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product", l.productId()));
 
             BigDecimal lineTotal = l.unitCost().multiply(BigDecimal.valueOf(l.quantityOrdered()));
@@ -90,7 +90,7 @@ public class ProductOrderController {
     public ResponseEntity<ProductOrder> get(
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(orderRepository.findByIdAndBarberId(id, principal.getBarberId())
+        return ResponseEntity.ok(orderRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id)));
     }
 
@@ -101,7 +101,7 @@ public class ProductOrderController {
             @RequestBody Map<String, Object> req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        ProductOrder order = orderRepository.findByIdAndBarberId(id, principal.getBarberId())
+        ProductOrder order = orderRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id));
 
         order.getLines().forEach(line -> {

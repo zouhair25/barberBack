@@ -2,8 +2,8 @@ package ma.barbershop.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import ma.barbershop.domain.entity.BarberProfile;
 import ma.barbershop.domain.entity.BarberService;
+import ma.barbershop.domain.entity.UserCentreSoin;
 import ma.barbershop.dto.request.service.ServiceRequest;
 import ma.barbershop.exception.*;
 import ma.barbershop.repository.*;
@@ -20,12 +20,12 @@ import java.util.List;
 public class BarberServiceController {
 
     private final BarberServiceRepository serviceRepository;
-    private final BarberProfileRepository barberProfileRepository;
+    private final UserCentreSoinRepository userCentreSoinRepository;
 
     @GetMapping
     public ResponseEntity<List<BarberService>> list(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(serviceRepository
-                .findByBarberIdAndActiveTrueOrderByDisplayOrderAsc(principal.getBarberId()));
+                .findByBarberIdAndActiveTrueOrderByDisplayOrderAsc(principal.getUserCentreSoinId()));
     }
 
     @PostMapping
@@ -33,10 +33,10 @@ public class BarberServiceController {
             @Valid @RequestBody ServiceRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        BarberProfile barber = barberProfileRepository.findById(principal.getBarberId()).orElseThrow();
+        UserCentreSoin barber = userCentreSoinRepository.findById(principal.getUserCentreSoinId()).orElseThrow();
 
         BarberService service = BarberService.builder()
-                .barber(barber)
+                .userCentreSoin(barber)
                 .name(req.name())
                 .category(req.category())
                 .description(req.description())
@@ -55,7 +55,7 @@ public class BarberServiceController {
             @Valid @RequestBody ServiceRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        BarberService service = serviceRepository.findByIdAndBarberId(id, principal.getBarberId())
+        BarberService service = serviceRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Service", id));
 
         service.setName(req.name());
@@ -73,7 +73,7 @@ public class BarberServiceController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        BarberService service = serviceRepository.findByIdAndBarberId(id, principal.getBarberId())
+        BarberService service = serviceRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Service", id));
 
         service.setActive(false);

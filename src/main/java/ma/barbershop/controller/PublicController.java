@@ -19,7 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class PublicController {
 
-    private final BarberProfileRepository barberProfileRepository;
+    private final UserCentreSoinRepository userCentreSoinRepository;
     private final AppointmentRepository appointmentRepository;
     private final BarberServiceRepository serviceRepository;
     private final ReviewRepository reviewRepository;
@@ -31,20 +31,20 @@ public class PublicController {
             @RequestParam(defaultValue = "20") int size) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("shopName"));
-        Page<BarberProfile> barbers = barberProfileRepository.findAllVisible(pageable);
+        Page<UserCentreSoin> userCentreSoins = userCentreSoinRepository.findAllVisible(pageable);
 
-        Page<Map<String, Object>> result = barbers.map(b -> {
+        Page<Map<String, Object>> result = userCentreSoins.map(b -> {
             long queueCount = appointmentRepository.countQueueForToday(b.getId(), LocalDateTime.now());
             Double avgRating = reviewRepository.findAverageRatingByBarberId(b.getId());
             Long reviewCount = reviewRepository.countVisibleByBarberId(b.getId());
 
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("id", b.getId());
-            map.put("shopName", b.getShopName());
+            /*map.put("shopName", b.getShopName());
             map.put("bio", b.getBio());
             map.put("address", b.getAddress());
             map.put("city", b.getCity());
-            map.put("phone", b.getPhone());
+            map.put("phone", b.getPhone());*/
             map.put("queueCount", queueCount);
             map.put("averageRating", avgRating != null ? Math.round(avgRating * 10.0) / 10.0 : null);
             map.put("reviewCount", reviewCount);
@@ -56,7 +56,7 @@ public class PublicController {
 
     @GetMapping("/barbers/{id}")
     public ResponseEntity<Map<String, Object>> getBarber(@PathVariable Long id) {
-        BarberProfile barber = barberProfileRepository.findById(id)
+        UserCentreSoin barber = userCentreSoinRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Barber", id));
 
         List<BarberService> services = serviceRepository
@@ -67,11 +67,11 @@ public class PublicController {
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("id", barber.getId());
-        result.put("shopName", barber.getShopName());
+        /*result.put("shopName", barber.getShopName());
         result.put("bio", barber.getBio());
         result.put("address", barber.getAddress());
         result.put("city", barber.getCity());
-        result.put("phone", barber.getPhone());
+        result.put("phone", barber.getPhone());*/
         result.put("queueCount", queueCount);
         result.put("averageRating", avgRating);
         result.put("services", services.stream().map(s -> Map.of(

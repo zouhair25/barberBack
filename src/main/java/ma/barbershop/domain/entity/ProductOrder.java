@@ -24,8 +24,8 @@ public class ProductOrder {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barber_id", nullable = false)
-    private BarberProfile barber;
+    @JoinColumn(name = "user_centre_soin_id", nullable = false)
+    private UserCentreSoin barber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")

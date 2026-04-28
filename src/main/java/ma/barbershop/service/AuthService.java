@@ -26,7 +26,7 @@ import java.util.UUID;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final BarberProfileRepository barberProfileRepository;
+    private final UserCentreSoinRepository userCentreSoinRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
@@ -56,13 +56,13 @@ public class AuthService {
         user = userRepository.save(user);
 
         if (req.role() == Role.BARBER) {
-            BarberProfile profile = BarberProfile.builder()
+            UserCentreSoin profile = UserCentreSoin.builder()
                     .user(user)
-                    .shopName(req.firstName() + " " + req.lastName())
-                    .phone(req.phone())
+                    //.shopName(req.firstName() + " " + req.lastName())
+                    //.phone(req.phone())
                     .visible(true)
                     .build();
-            barberProfileRepository.save(profile);
+            userCentreSoinRepository.save(profile);
             user = userRepository.findById(user.getId()).orElseThrow();
         }
 
@@ -123,7 +123,7 @@ public class AuthService {
                 principal.getEmail(),
                 null, null,  // will be resolved via separate user query if needed
                 principal.getRole(),
-                principal.getBarberId()
+                principal.getUserCentreSoinId()
         );
     }
 

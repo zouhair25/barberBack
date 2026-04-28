@@ -39,7 +39,7 @@ public class ReviewController {
 
         Review review = Review.builder()
                 .appointment(apt)
-                .barber(apt.getBarber())
+                .userCentreSoin(apt.getUserCentreSoin())
                 .client(apt.getClient())
                 .rating(req.rating())
                 .comment(req.comment())
@@ -57,7 +57,7 @@ public class ReviewController {
 
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(reviewRepository
-                .findByBarberIdOrderByCreatedAtDesc(principal.getBarberId(), pageable));
+                .findByBarberIdOrderByCreatedAtDesc(principal.getUserCentreSoinId(), pageable));
     }
 
     @PatchMapping("/barber/reviews/{id}/visibility")
@@ -68,7 +68,7 @@ public class ReviewController {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review", id));
 
-        if (!review.getBarber().getId().equals(principal.getBarberId())) {
+        if (!review.getUserCentreSoin().getId().equals(principal.getUserCentreSoinId())) {
             throw new UnauthorizedAccessException();
         }
 

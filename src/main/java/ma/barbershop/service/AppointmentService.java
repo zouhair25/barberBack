@@ -20,20 +20,20 @@ import java.util.Map;
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
-    private final BarberProfileRepository barberProfileRepository;
+    private final UserCentreSoinRepository userCentreSoinRepository;
     private final BarberServiceRepository serviceRepository;
     private final UserRepository userRepository;
     private final SlotAvailabilityService slotService;
 
     @Transactional
     public Appointment book(BookAppointmentRequest req, UserPrincipal principal) {
-        BarberProfile barber = barberProfileRepository.findById(req.barberId())
+        UserCentreSoin barber = userCentreSoinRepository.findById(req.barberId())
                 .orElseThrow(() -> new ResourceNotFoundException("Barber", req.barberId()));
 
         BarberService service = serviceRepository.findById(req.serviceId())
                 .orElseThrow(() -> new ResourceNotFoundException("Service", req.serviceId()));
 
-        if (!service.getBarber().getId().equals(barber.getId())) {
+        if (!service.getUserCentreSoin().getId().equals(barber.getId())) {
             throw new BusinessException("Service does not belong to this barber");
         }
 
@@ -48,7 +48,7 @@ public class AppointmentService {
         long queuePos = appointmentRepository.countQueueForToday(req.barberId(), req.startTime()) + 1;
 
         Appointment apt = Appointment.builder()
-                .barber(barber)
+                .userCentreSoin(barber)
                 .client(client)
                 .service(service)
                 .startTime(req.startTime())
@@ -71,7 +71,7 @@ public class AppointmentService {
         Appointment apt = appointmentRepository.findByIdAndClientId(appointmentId, principal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", appointmentId));
 
-        long ahead = appointmentRepository.countAhead(apt.getBarber().getId(), apt.getStartTime());
+        long ahead = appointmentRepository.countAhead(apt.getUserCentreSoin().getId(), apt.getStartTime());
 
         return Map.of(
                 "appointmentId", appointmentId,
@@ -97,7 +97,7 @@ public class AppointmentService {
 
     @Transactional
     public Appointment updateStatus(Long appointmentId, UpdateAppointmentStatusRequest req, UserPrincipal principal) {
-        Appointment apt = appointmentRepository.findByIdAndBarberId(appointmentId, principal.getBarberId())
+        Appointment apt = appointmentRepository.findByIdAndBarberId(appointmentId, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", appointmentId));
 
         apt.setStatus(req.status());
@@ -108,13 +108,13 @@ public class AppointmentService {
     public List<Appointment> getBarberAppointments(LocalDateTime from, LocalDateTime to,
                                                     AppointmentStatus status, UserPrincipal principal) {
         return appointmentRepository.findActiveByBarberAndDateRange(
-                principal.getBarberId(), from, to);
+                principal.getUserCentreSoinId(), from, to);
     }
 
     @Transactional(readOnly = true)
     public List<Appointment> getTodayQueue(UserPrincipal principal) {
         LocalDateTime start = LocalDateTime.now().toLocalDate().atStartOfDay();
         LocalDateTime end = start.plusDays(1);
-        return appointmentRepository.findActiveByBarberAndDateRange(principal.getBarberId(), start, end);
+        return appointmentRepository.findActiveByBarberAndDateRange(principal.getUserCentreSoinId(), start, end);
     }
 }

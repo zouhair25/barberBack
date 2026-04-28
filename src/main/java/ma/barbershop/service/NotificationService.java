@@ -47,7 +47,7 @@ public class NotificationService {
             return;
         }
 
-        String barberName = apt.getBarber().getShopName();
+        String barberName = apt.getUserCentreSoin().getShopName();
         String time = apt.getStartTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm"));
         String message = String.format(
                 "Rappel RDV: Vous avez un rendez-vous chez %s le %s pour %s. À bientôt!",

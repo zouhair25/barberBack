@@ -13,13 +13,15 @@ C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\controller\StatisticsController.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\controller\StockController.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\Appointment.java
-C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\BarberProfile.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\BarberService.java
+C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\CenterSoin.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\ClosingDay.java
+C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\ConfigUserCentreSoin.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\Invoice.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\InvoiceLine.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\Notification.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\OpeningHours.java
+C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\Pays.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\Product.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\ProductOrder.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\ProductOrderLine.java
@@ -29,6 +31,8 @@ C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\StockMovement.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\Supplier.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\User.java
+C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\UserCentreSoin.java
+C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\entity\Ville.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\enums\AppointmentStatus.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\enums\InvoiceLineType.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\domain\enums\MovementType.java
@@ -57,7 +61,6 @@ C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\exception\ResourceNotFoundException.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\exception\UnauthorizedAccessException.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\AppointmentRepository.java
-C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\BarberProfileRepository.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\BarberServiceRepository.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\ClosingDayRepository.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\InvoiceRepository.java
@@ -69,6 +72,7 @@ C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\ReviewRepository.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\StockMovementRepository.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\SupplierRepository.java
+C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\UserCentreSoinRepository.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\repository\UserRepository.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\security\CustomUserDetailsService.java
 C:\Users\ZOUHAIR FASSIH\IdeaProjects\barbershop-app\barbershop-api\src\main\java\ma\barbershop\security\JwtAuthenticationFilter.java

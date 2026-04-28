@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "closing_days",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"barber_id", "closed_date"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_centre_soin_id", "closed_date"}))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,8 +20,8 @@ public class ClosingDay {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barber_id", nullable = false)
-    private BarberProfile barber;
+    @JoinColumn(name = "user_centre_soin_id", nullable = false)
+    private UserCentreSoin userCentreSoin;
 
     @Column(name = "closed_date", nullable = false)
     private LocalDate closedDate;

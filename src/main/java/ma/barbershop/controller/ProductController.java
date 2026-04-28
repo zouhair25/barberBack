@@ -19,11 +19,11 @@ import java.util.List;
 public class ProductController {
 
     private final ProductRepository productRepository;
-    private final BarberProfileRepository barberProfileRepository;
+    private final UserCentreSoinRepository userCentreSoinRepository;
 
     @GetMapping
     public ResponseEntity<List<Product>> list(@AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(productRepository.findByBarberIdAndActiveTrue(principal.getBarberId()));
+        return ResponseEntity.ok(productRepository.findByBarberIdAndActiveTrue(principal.getUserCentreSoinId()));
     }
 
     @PostMapping
@@ -31,10 +31,10 @@ public class ProductController {
             @Valid @RequestBody ProductRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        BarberProfile barber = barberProfileRepository.findById(principal.getBarberId()).orElseThrow();
+        UserCentreSoin barber = userCentreSoinRepository.findById(principal.getUserCentreSoinId()).orElseThrow();
 
         Product product = Product.builder()
-                .barber(barber)
+                .userCentreSoin(barber)
                 .name(req.name())
                 .description(req.description())
                 .sku(req.sku())
@@ -56,7 +56,7 @@ public class ProductController {
             @Valid @RequestBody ProductRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Product product = productRepository.findByIdAndBarberId(id, principal.getBarberId())
+        Product product = productRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         product.setName(req.name());
@@ -76,7 +76,7 @@ public class ProductController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Product product = productRepository.findByIdAndBarberId(id, principal.getBarberId())
+        Product product = productRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         product.setForSale(!product.isForSale());
@@ -88,7 +88,7 @@ public class ProductController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Product product = productRepository.findByIdAndBarberId(id, principal.getBarberId())
+        Product product = productRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         product.setActive(false);

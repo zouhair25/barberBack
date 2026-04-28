@@ -17,7 +17,7 @@ public class UserPrincipal implements UserDetails {
     private final String email;
     private final String password;
     private final Role role;
-    private final Long barberId;
+    private final Long userCentreSoinId;
     private final boolean active;
 
     public UserPrincipal(User user) {
@@ -26,9 +26,9 @@ public class UserPrincipal implements UserDetails {
         this.password = user.getPasswordHash();
         this.role = user.getRole();
         this.active = user.isActive();
-        this.barberId = (user.getBarberProfile() != null)
+        this.userCentreSoinId =/* (user.getBarberProfile() != null)
                 ? user.getBarberProfile().getId()
-                : null;
+                : */null;
     }
 
     @Override

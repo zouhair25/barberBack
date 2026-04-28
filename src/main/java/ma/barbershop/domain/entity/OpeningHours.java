@@ -7,7 +7,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "opening_hours",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"barber_id", "day_of_week"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_centre_soin_id", "day_of_week"}))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,8 +20,8 @@ public class OpeningHours {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barber_id", nullable = false)
-    private BarberProfile barber;
+    @JoinColumn(name = "user_centre_soin_id", nullable = false)
+    private UserCentreSoin userCentreSoin;
 
     @Column(name = "day_of_week", nullable = false)
     private Integer dayOfWeek; // 0=Sunday, 1=Monday ... 6=Saturday

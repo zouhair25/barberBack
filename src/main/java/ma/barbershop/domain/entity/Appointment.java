@@ -22,8 +22,8 @@ public class Appointment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barber_id", nullable = false)
-    private BarberProfile barber;
+    @JoinColumn(name = "user_centre_soin_id", nullable = false)
+    private UserCentreSoin userCentreSoin;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)

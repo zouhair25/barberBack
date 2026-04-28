@@ -23,8 +23,8 @@ public class BarberService {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barber_id", nullable = false)
-    private BarberProfile barber;
+    @JoinColumn(name = "user_centre_soin_id", nullable = false)
+    private UserCentreSoin userCentreSoin;
 
     @Column(nullable = false)
     private String name;

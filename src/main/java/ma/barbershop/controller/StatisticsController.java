@@ -29,7 +29,7 @@ public class StatisticsController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
             @RequestParam(defaultValue = "DAY") String groupBy,
             @AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(statisticsService.getRevenueByPeriod(principal.getBarberId(), from, to, groupBy));
+        return ResponseEntity.ok(statisticsService.getRevenueByPeriod(principal.getUserCentreSoinId(), from, to, groupBy));
     }
 
     @GetMapping("/services")
@@ -37,14 +37,14 @@ public class StatisticsController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
             @AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(statisticsService.getTopServices(principal.getBarberId(), from, to));
+        return ResponseEntity.ok(statisticsService.getTopServices(principal.getUserCentreSoinId(), from, to));
     }
 
     @GetMapping("/clients")
     public ResponseEntity<List<Map<String, Object>>> loyalClients(
             @RequestParam(defaultValue = "10") int limit,
             @AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(statisticsService.getLoyalClients(principal.getBarberId(), limit));
+        return ResponseEntity.ok(statisticsService.getLoyalClients(principal.getUserCentreSoinId(), limit));
     }
 
     @GetMapping("/products")
@@ -52,6 +52,6 @@ public class StatisticsController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
             @AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(statisticsService.getTopProducts(principal.getBarberId(), from, to));
+        return ResponseEntity.ok(statisticsService.getTopProducts(principal.getUserCentreSoinId(), from, to));
     }
 }

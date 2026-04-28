@@ -25,12 +25,12 @@ public class StockController {
 
     @GetMapping
     public ResponseEntity<List<Product>> getStock(@AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(productRepository.findByBarberIdAndActiveTrue(principal.getBarberId()));
+        return ResponseEntity.ok(productRepository.findByBarberIdAndActiveTrue(principal.getUserCentreSoinId()));
     }
 
     @GetMapping("/alerts")
     public ResponseEntity<List<Product>> getLowStock(@AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(productRepository.findLowStock(principal.getBarberId()));
+        return ResponseEntity.ok(productRepository.findLowStock(principal.getUserCentreSoinId()));
     }
 
     @PostMapping("/adjustment")
@@ -43,7 +43,7 @@ public class StockController {
         int quantity = Integer.parseInt(req.get("quantity").toString());
         String notes = req.getOrDefault("notes", "").toString();
 
-        Product product = productRepository.findByIdAndBarberId(productId, principal.getBarberId())
+        Product product = productRepository.findByIdAndBarberId(productId, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product", productId));
 
         int newQty = product.getStockQuantity() + quantity;
@@ -70,6 +70,6 @@ public class StockController {
 
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(stockMovementRepository
-                .findByProductBarberIdOrderByCreatedAtDesc(principal.getBarberId(), pageable));
+                .findByProductBarberIdOrderByCreatedAtDesc(principal.getUserCentreSoinId(), pageable));
     }
 }

@@ -16,7 +16,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class SlotAvailabilityService {
 
-    private final BarberProfileRepository barberProfileRepository;
+    private final UserCentreSoinRepository userCentreSoinRepository;
     private final OpeningHoursRepository openingHoursRepository;
     private final ClosingDayRepository closingDayRepository;
     private final AppointmentRepository appointmentRepository;
@@ -24,7 +24,7 @@ public class SlotAvailabilityService {
 
     @Transactional(readOnly = true)
     public List<LocalDateTime> getAvailableSlots(Long barberId, LocalDate date, Long serviceId) {
-        BarberProfile barber = barberProfileRepository.findById(barberId)
+        UserCentreSoin barber = userCentreSoinRepository.findById(barberId)
                 .orElseThrow(() -> new ResourceNotFoundException("Barber", barberId));
 
         // Check if it's a closing day
