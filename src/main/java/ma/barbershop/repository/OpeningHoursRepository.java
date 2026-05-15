@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OpeningHoursRepository extends JpaRepository<OpeningHours, Long> {
-    List<OpeningHours> findByBarberId(Long barberId);
-    Optional<OpeningHours> findByBarberIdAndDayOfWeek(Long barberId, Integer dayOfWeek);
-    void deleteByBarberId(Long barberId);
+    List<OpeningHours> findByUserCentreSoinId(Long userCentreSoinId);
+    Optional<OpeningHours> findByUserCentreSoinIdAndDayOfWeek(Long userCentreSoinId, Integer dayOfWeek);
+    void deleteByUserCentreSoinId(Long userCentreSoinId);
 }

@@ -7,34 +7,36 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "center_soin")
+@Table(name = "centre_soin")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CenterSoin {
+public class CentreSoin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user;
-
     @Column(name = "shop_name", nullable = false)
     private String shopName;
+
+    @Column(name = "active", nullable = false)
+    private Boolean active;
 
     @Column(columnDefinition = "TEXT")
     private String bio;
 
-    private String address;
-    private String city;
+    private String addresse;
+
+    private String quartier;
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "ville_id")
+    private Ville ville;
 
     @Column(precision = 10, scale = 7)
     private BigDecimal latitude;
@@ -42,7 +44,7 @@ public class CenterSoin {
     @Column(precision = 10, scale = 7)
     private BigDecimal longitude;
 
-    private String phone;
+    private String fix;
 
     @Column(name = "is_visible", nullable = false)
     private boolean visible = true;
@@ -54,4 +56,9 @@ public class CenterSoin {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "centreSoin")
+    private List<UserCentreSoin> userCentreSoins;
+
+    private String img;
 }

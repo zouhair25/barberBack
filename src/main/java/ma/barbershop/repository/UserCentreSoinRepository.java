@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface UserCentreSoinRepository extends JpaRepository<UserCentreSoin, Long> {
     Optional<UserCentreSoin> findByUserId(Long userId);
 
-    @Query("SELECT b FROM BarberProfile b WHERE b.visible = true AND b.user.active = true AND b.user.deletedAt IS NULL")
+    @Query("SELECT b FROM UserCentreSoin b WHERE b.visible = true AND b.user.active = true AND b.user.deletedAt IS NULL")
     Page<UserCentreSoin> findAllVisible(Pageable pageable);
 }

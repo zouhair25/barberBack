@@ -27,8 +27,8 @@ public class AppointmentService {
 
     @Transactional
     public Appointment book(BookAppointmentRequest req, UserPrincipal principal) {
-        UserCentreSoin barber = userCentreSoinRepository.findById(req.barberId())
-                .orElseThrow(() -> new ResourceNotFoundException("Barber", req.barberId()));
+        UserCentreSoin barber = userCentreSoinRepository.findById(req.userCenterSoinId())
+                .orElseThrow(() -> new ResourceNotFoundException("Barber", req.userCenterSoinId()));
 
         BarberService service = serviceRepository.findById(req.serviceId())
                 .orElseThrow(() -> new ResourceNotFoundException("Service", req.serviceId()));
@@ -37,7 +37,7 @@ public class AppointmentService {
             throw new BusinessException("Service does not belong to this barber");
         }
 
-        if (!slotService.isSlotAvailable(req.barberId(), req.startTime(), service.getDurationMin())) {
+        if (!slotService.isSlotAvailable(req.userCenterSoinId(), req.startTime(), service.getDurationMin())) {
             throw new BusinessException("Slot is not available");
         }
 
@@ -45,7 +45,7 @@ public class AppointmentService {
         LocalDateTime endTime = req.startTime().plusMinutes(service.getDurationMin());
 
         // Assign queue position
-        long queuePos = appointmentRepository.countQueueForToday(req.barberId(), req.startTime()) + 1;
+        long queuePos = appointmentRepository.countQueueForToday(req.userCenterSoinId(), req.startTime()) + 1;
 
         Appointment apt = Appointment.builder()
                 .userCentreSoin(barber)
@@ -97,7 +97,7 @@ public class AppointmentService {
 
     @Transactional
     public Appointment updateStatus(Long appointmentId, UpdateAppointmentStatusRequest req, UserPrincipal principal) {
-        Appointment apt = appointmentRepository.findByIdAndBarberId(appointmentId, principal.getUserCentreSoinId())
+        Appointment apt = appointmentRepository.findByIdAndUserCentreSoinId(appointmentId, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", appointmentId));
 
         apt.setStatus(req.status());

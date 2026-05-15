@@ -25,7 +25,7 @@ public class BarberServiceController {
     @GetMapping
     public ResponseEntity<List<BarberService>> list(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(serviceRepository
-                .findByBarberIdAndActiveTrueOrderByDisplayOrderAsc(principal.getUserCentreSoinId()));
+                .findByUserCentreSoinIdAndActiveTrueOrderByDisplayOrderAsc(principal.getUserCentreSoinId()));
     }
 
     @PostMapping
@@ -55,7 +55,7 @@ public class BarberServiceController {
             @Valid @RequestBody ServiceRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        BarberService service = serviceRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
+        BarberService service = serviceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Service", id));
 
         service.setName(req.name());
@@ -73,7 +73,7 @@ public class BarberServiceController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        BarberService service = serviceRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
+        BarberService service = serviceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Service", id));
 
         service.setActive(false);

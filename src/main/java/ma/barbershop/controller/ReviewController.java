@@ -57,7 +57,7 @@ public class ReviewController {
 
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(reviewRepository
-                .findByBarberIdOrderByCreatedAtDesc(principal.getUserCentreSoinId(), pageable));
+                .findByUserCentreSoinIdOrderByCreatedAtDesc(principal.getUserCentreSoinId(), pageable));
     }
 
     @PatchMapping("/barber/reviews/{id}/visibility")

@@ -5,6 +5,7 @@ import ma.barbershop.domain.entity.*;
 import ma.barbershop.exception.ResourceNotFoundException;
 import ma.barbershop.repository.*;
 import ma.barbershop.service.SlotAvailabilityService;
+import ma.barbershop.service.UserService;
 import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -24,24 +25,27 @@ public class PublicController {
     private final BarberServiceRepository serviceRepository;
     private final ReviewRepository reviewRepository;
     private final SlotAvailabilityService slotService;
-
+    private final UserService userService;
     @GetMapping("/barbers")
     public ResponseEntity<Page<Map<String, Object>>> listBarbers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("shopName"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         Page<UserCentreSoin> userCentreSoins = userCentreSoinRepository.findAllVisible(pageable);
 
         Page<Map<String, Object>> result = userCentreSoins.map(b -> {
             long queueCount = appointmentRepository.countQueueForToday(b.getId(), LocalDateTime.now());
-            Double avgRating = reviewRepository.findAverageRatingByBarberId(b.getId());
-            Long reviewCount = reviewRepository.countVisibleByBarberId(b.getId());
+            Double avgRating = reviewRepository.findAverageRatingByUserCentreSoinId(b.getId());
+            Long reviewCount = reviewRepository.countVisibleByUserCentreSoinId(b.getId());
 
             Map<String, Object> map = new LinkedHashMap<>();
+            String shopName = Optional.ofNullable(b.getCentreSoin())
+                    .map(CentreSoin::getShopName)
+                    .orElse(null);
             map.put("id", b.getId());
-            /*map.put("shopName", b.getShopName());
-            map.put("bio", b.getBio());
+            map.put("shopName", shopName);
+            /*map.put("bio", b.getBio());
             map.put("address", b.getAddress());
             map.put("city", b.getCity());
             map.put("phone", b.getPhone());*/
@@ -60,10 +64,10 @@ public class PublicController {
                 .orElseThrow(() -> new ResourceNotFoundException("Barber", id));
 
         List<BarberService> services = serviceRepository
-                .findByBarberIdAndActiveTrueOrderByDisplayOrderAsc(id);
+                .findByUserCentreSoinIdAndActiveTrueOrderByDisplayOrderAsc(id);
 
         long queueCount = appointmentRepository.countQueueForToday(id, LocalDateTime.now());
-        Double avgRating = reviewRepository.findAverageRatingByBarberId(id);
+        Double avgRating = reviewRepository.findAverageRatingByUserCentreSoinId(id);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("id", barber.getId());
@@ -93,4 +97,10 @@ public class PublicController {
             @RequestParam(required = false) Long serviceId) {
         return ResponseEntity.ok(slotService.getAvailableSlots(id, date, serviceId));
     }
+
+    @GetMapping("/villes")
+    public List<Ville> searchVilles(@RequestParam("q")  String q){
+       return this.userService.searchVilles(q);
+    }
+
 }

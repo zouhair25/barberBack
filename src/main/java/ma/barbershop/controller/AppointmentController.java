@@ -31,7 +31,7 @@ public class AppointmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(appointmentService.book(req, principal));
     }
 
-    @GetMapping("/user/appointments")
+    /*@GetMapping("/user/appointments")
     public ResponseEntity<Page<Appointment>> myAppointments(
             @AuthenticationPrincipal UserPrincipal principal,
             @RequestParam(defaultValue = "0") int page,
@@ -81,5 +81,5 @@ public class AppointmentController {
             @Valid @RequestBody UpdateAppointmentStatusRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(appointmentService.updateStatus(id, req, principal));
-    }
+    }*/
 }

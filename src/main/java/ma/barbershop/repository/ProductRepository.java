@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByBarberIdAndActiveTrue(Long barberId);
-    List<Product> findByBarberIdAndActiveTrueAndForSaleTrue(Long barberId);
-    Optional<Product> findByIdAndBarberId(Long id, Long barberId);
+    List<Product> findByUserCentreSoinIdAndActiveTrue(Long userCentreSoinId);
+    List<Product> findByUserCentreSoinIdAndActiveTrueAndForSaleTrue(Long userCentreSoinId);
+    Optional<Product> findByIdAndUserCentreSoinId(Long id, Long userCentreSoinId);
 
-    @Query("SELECT p FROM Product p WHERE p.barber.id = :barberId AND p.active = true AND p.stockQuantity <= p.stockAlertMin")
-    List<Product> findLowStock(Long barberId);
+    @Query("SELECT p FROM Product p WHERE p.userCentreSoin.id = :userCentreSoinId AND p.active = true AND p.stockQuantity <= p.stockAlertMin")
+    List<Product> findLowStock(Long userCentreSoinId);
 }

@@ -9,13 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    Page<Review> findByBarberIdAndVisibleTrueOrderByCreatedAtDesc(Long barberId, Pageable pageable);
-    Page<Review> findByBarberIdOrderByCreatedAtDesc(Long barberId, Pageable pageable);
+    Page<Review> findByUserCentreSoinIdAndVisibleTrueOrderByCreatedAtDesc(Long userCentreSoinId, Pageable pageable);
+    Page<Review> findByUserCentreSoinIdOrderByCreatedAtDesc(Long userCentreSoinId, Pageable pageable);
     Optional<Review> findByAppointmentId(Long appointmentId);
 
-    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.barber.id = :barberId AND r.visible = true")
-    Double findAverageRatingByBarberId(Long barberId);
+    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.userCentreSoin.id = :userCentreSoinId AND r.visible = true")
+    Double findAverageRatingByUserCentreSoinId(Long userCentreSoinId);
 
-    @Query("SELECT COUNT(r) FROM Review r WHERE r.barber.id = :barberId AND r.visible = true")
-    Long countVisibleByBarberId(Long barberId);
+    @Query("SELECT COUNT(r) FROM Review r WHERE r.userCentreSoin.id = :userCentreSoinId AND r.visible = true")
+    Long countVisibleByUserCentreSoinId(Long userCentreSoinId);
 }

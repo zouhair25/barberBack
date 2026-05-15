@@ -25,7 +25,7 @@ public class ProductOrder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_centre_soin_id", nullable = false)
-    private UserCentreSoin barber;
+    private UserCentreSoin userCentreSoin;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")

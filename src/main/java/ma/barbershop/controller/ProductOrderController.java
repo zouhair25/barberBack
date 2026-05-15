@@ -35,7 +35,7 @@ public class ProductOrderController {
             @RequestParam(defaultValue = "20") int size,
             @AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(orderRepository
-                .findByBarberIdOrderByOrderDateDesc(principal.getUserCentreSoinId(), PageRequest.of(page, size)));
+                .findByUserCentreSoinIdOrderByOrderDateDesc(principal.getUserCentreSoinId(), PageRequest.of(page, size)));
     }
 
     @PostMapping
@@ -44,11 +44,11 @@ public class ProductOrderController {
             @Valid @RequestBody ProductOrderRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        UserCentreSoin barber = userCentreSoinRepository.findById(principal.getUserCentreSoinId()).orElseThrow();
+        UserCentreSoin userCentreSoin = userCentreSoinRepository.findById(principal.getUserCentreSoinId()).orElseThrow();
 
         Supplier supplier = null;
         if (req.supplierId() != null) {
-            supplier = supplierRepository.findByIdAndBarberId(req.supplierId(), principal.getUserCentreSoinId())
+            supplier = supplierRepository.findByIdAndUserCentreSoinId(req.supplierId(), principal.getUserCentreSoinId())
                     .orElseThrow(() -> new ResourceNotFoundException("Supplier", req.supplierId()));
         }
 
@@ -56,7 +56,7 @@ public class ProductOrderController {
         BigDecimal total = BigDecimal.ZERO;
 
         ProductOrder order = ProductOrder.builder()
-                .barber(barber)
+                .userCentreSoin(userCentreSoin)
                 .supplier(supplier)
                 .orderDate(LocalDateTime.now())
                 .expectedDate(req.expectedDate())
@@ -65,7 +65,7 @@ public class ProductOrderController {
                 .build();
 
         for (ProductOrderRequest.OrderLine l : req.lines()) {
-            Product product = productRepository.findByIdAndBarberId(l.productId(), principal.getUserCentreSoinId())
+            Product product = productRepository.findByIdAndUserCentreSoinId(l.productId(), principal.getUserCentreSoinId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product", l.productId()));
 
             BigDecimal lineTotal = l.unitCost().multiply(BigDecimal.valueOf(l.quantityOrdered()));
@@ -90,7 +90,7 @@ public class ProductOrderController {
     public ResponseEntity<ProductOrder> get(
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(orderRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
+        return ResponseEntity.ok(orderRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id)));
     }
 
@@ -101,7 +101,7 @@ public class ProductOrderController {
             @RequestBody Map<String, Object> req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        ProductOrder order = orderRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
+        ProductOrder order = orderRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id));
 
         order.getLines().forEach(line -> {

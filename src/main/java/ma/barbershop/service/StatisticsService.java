@@ -23,10 +23,10 @@ public class StatisticsService {
     public Map<String, Object> getDailyStats(UserPrincipal principal) {
         LocalDateTime start = LocalDate.now().atStartOfDay();
         LocalDateTime end = start.plusDays(1);
-        Long barberId = principal.getUserCentreSoinId();
+        Long userCentreSoinId = principal.getUserCentreSoinId();
 
-        BigDecimal revenue = invoiceRepository.sumRevenueByBarberAndPeriod(barberId, start, end);
-        long totalAppointments = appointmentRepository.countQueueForToday(barberId, LocalDateTime.now());
+        BigDecimal revenue = invoiceRepository.sumRevenueByBarberAndPeriod(userCentreSoinId, start, end);
+        long totalAppointments = appointmentRepository.countQueueForToday(userCentreSoinId, LocalDateTime.now());
 
         return Map.of(
                 "date", LocalDate.now(),

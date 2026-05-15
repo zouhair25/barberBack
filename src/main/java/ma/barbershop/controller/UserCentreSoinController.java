@@ -3,10 +3,13 @@ package ma.barbershop.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ma.barbershop.domain.entity.*;
-import ma.barbershop.dto.request.barber.*;
+import ma.barbershop.dto.request.auth.RegisterRequest;
+import ma.barbershop.dto.request.userCentreSoin.*;
+import ma.barbershop.dto.response.auth.AuthResponse;
 import ma.barbershop.exception.*;
 import ma.barbershop.repository.*;
 import ma.barbershop.security.UserPrincipal;
+import ma.barbershop.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserCentreSoinController {
 
+    private final UserService userService;
     private final UserCentreSoinRepository userCentreSoinRepository;
     private final OpeningHoursRepository openingHoursRepository;
     private final ClosingDayRepository closingDayRepository;
@@ -28,6 +32,11 @@ public class UserCentreSoinController {
         UserCentreSoin profile = userCentreSoinRepository.findByUserId(principal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Barber profile not found"));
         return ResponseEntity.ok(profile);
+    }
+
+    @PostMapping("/register-complete")
+    public ResponseEntity<UserCentreSoin> registerComplete(@Valid @RequestBody RegisterCompleteRequest req){
+        return ResponseEntity.ok(userService.registerComplete(req));
     }
 
    /* @PutMapping
@@ -56,10 +65,10 @@ public class UserCentreSoinController {
             @Valid @RequestBody OpeningHoursRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Long barberId = principal.getUserCentreSoinId();
-        openingHoursRepository.deleteByBarberId(barberId);
+        Long userCentreSoinId = principal.getUserCentreSoinId();
+        openingHoursRepository.deleteByUserCentreSoinId(userCentreSoinId);
 
-        UserCentreSoin barber = userCentreSoinRepository.findById(barberId).orElseThrow();
+        UserCentreSoin barber = userCentreSoinRepository.findById(userCentreSoinId).orElseThrow();
 
         List<OpeningHours> saved = req.schedule().stream().map(day ->
                 openingHoursRepository.save(OpeningHours.builder()
@@ -81,12 +90,12 @@ public class UserCentreSoinController {
             @Valid @RequestBody ClosingDayRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Long barberId = principal.getUserCentreSoinId();
-        if (closingDayRepository.existsByBarberIdAndClosedDate(barberId, req.date())) {
+        Long userCentreSoinId = principal.getUserCentreSoinId();
+        if (closingDayRepository.existsByUserCentreSoinIdAndClosedDate(userCentreSoinId, req.date())) {
             throw new BusinessException("Closing day already exists for this date");
         }
 
-        UserCentreSoin barber = userCentreSoinRepository.findById(barberId).orElseThrow();
+        UserCentreSoin barber = userCentreSoinRepository.findById(userCentreSoinId).orElseThrow();
         ClosingDay cd = ClosingDay.builder()
                 .userCentreSoin(barber)
                 .closedDate(req.date())

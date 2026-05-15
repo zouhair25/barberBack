@@ -1,6 +1,7 @@
 package ma.barbershop.dto.request.auth;
 
 import jakarta.validation.constraints.*;
+import ma.barbershop.domain.entity.TypeUser;
 import ma.barbershop.domain.enums.Role;
 
 public record RegisterRequest(
@@ -9,5 +10,6 @@ public record RegisterRequest(
         @NotBlank @Size(min = 8) String password,
         @NotBlank String firstName,
         @NotBlank String lastName,
-        @NotNull Role role  // USER or BARBER
+        @NotNull Role role  ,// USER or BARBER
+        @Null String typeUser
 ) {}

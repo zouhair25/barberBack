@@ -1,5 +1,6 @@
 package ma.barbershop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,9 +18,10 @@ public class Ville {
 
     private  String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pays_id" )
-    private  Pays pays;
+    //@JsonIgnore
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "pays_id" )
+    //private  Pays pays;
 
 
 

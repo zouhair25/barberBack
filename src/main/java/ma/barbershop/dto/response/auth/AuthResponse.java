@@ -10,5 +10,5 @@ public record AuthResponse(
         String firstName,
         String lastName,
         Role role,
-        Long barberId
+        Long userCentreSoinId
 ) {}

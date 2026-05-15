@@ -23,6 +23,7 @@ spring:
 
   flyway:
     enabled: false
+    baseline-on-migrate: false
 
   servlet:
     multipart:

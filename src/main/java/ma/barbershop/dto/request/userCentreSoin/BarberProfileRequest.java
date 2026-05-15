@@ -1,4 +1,4 @@
-package ma.barbershop.dto.request.barber;
+package ma.barbershop.dto.request.userCentreSoin;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -23,19 +23,19 @@ public class SlotAvailabilityService {
     private final BarberServiceRepository serviceRepository;
 
     @Transactional(readOnly = true)
-    public List<LocalDateTime> getAvailableSlots(Long barberId, LocalDate date, Long serviceId) {
-        UserCentreSoin barber = userCentreSoinRepository.findById(barberId)
-                .orElseThrow(() -> new ResourceNotFoundException("Barber", barberId));
+    public List<LocalDateTime> getAvailableSlots(Long userCentreSoinId, LocalDate date, Long serviceId) {
+        UserCentreSoin barber = userCentreSoinRepository.findById(userCentreSoinId)
+                .orElseThrow(() -> new ResourceNotFoundException("Barber", userCentreSoinId));
 
         // Check if it's a closing day
-        if (closingDayRepository.existsByBarberIdAndClosedDate(barberId, date)) {
+        if (closingDayRepository.existsByUserCentreSoinIdAndClosedDate(userCentreSoinId, date)) {
             return Collections.emptyList();
         }
 
         // Get opening hours for that day (0=Sunday, 1=Monday...)
         int dayOfWeek = date.getDayOfWeek().getValue() % 7; // Convert ISO (Mon=1) to (Sun=0)
         Optional<OpeningHours> hoursOpt = openingHoursRepository
-                .findByBarberIdAndDayOfWeek(barberId, dayOfWeek);
+                .findByUserCentreSoinIdAndDayOfWeek(userCentreSoinId, dayOfWeek);
 
         if (hoursOpt.isEmpty() || hoursOpt.get().isClosed()) {
             return Collections.emptyList();
@@ -60,7 +60,7 @@ public class SlotAvailabilityService {
         LocalDateTime dayStart = date.atStartOfDay();
         LocalDateTime dayEnd = date.atTime(23, 59, 59);
         List<Appointment> existing = appointmentRepository
-                .findActiveByBarberAndDateRange(barberId, dayStart, dayEnd);
+                .findActiveByBarberAndDateRange(userCentreSoinId, dayStart, dayEnd);
 
         // Remove occupied slots
         return allSlots.stream()
@@ -88,8 +88,8 @@ public class SlotAvailabilityService {
         );
     }
 
-    public boolean isSlotAvailable(Long barberId, LocalDateTime startTime, int durationMin) {
-        List<LocalDateTime> available = getAvailableSlots(barberId, startTime.toLocalDate(), null);
+    public boolean isSlotAvailable(Long userCentreSoinId, LocalDateTime startTime, int durationMin) {
+        List<LocalDateTime> available = getAvailableSlots(userCentreSoinId, startTime.toLocalDate(), null);
         return available.contains(startTime);
     }
 }

@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BarberServiceRepository extends JpaRepository<BarberService, Long> {
-    List<BarberService> findByBarberIdAndActiveTrueOrderByDisplayOrderAsc(Long barberId);
-    Optional<BarberService> findByIdAndBarberId(Long id, Long barberId);
+    List<BarberService> findByUserCentreSoinIdAndActiveTrueOrderByDisplayOrderAsc(Long userCentreSoinId);
+    Optional<BarberService> findByIdAndUserCentreSoinId(Long id, Long userCentreSoinId);
 }

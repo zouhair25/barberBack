@@ -29,7 +29,7 @@ public class CheckoutService {
 
     @Transactional
     public Invoice checkout(CheckoutRequest req, UserPrincipal principal) {
-        Appointment apt = appointmentRepository.findByIdAndBarberId(req.appointmentId(), principal.getUserCentreSoinId())
+        Appointment apt = appointmentRepository.findByIdAndUserCentreSoinId(req.appointmentId(), principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", req.appointmentId()));
 
         if (apt.getStatus() == AppointmentStatus.COMPLETED) {
@@ -62,7 +62,7 @@ public class CheckoutService {
         // Product lines
         if (req.products() != null) {
             for (CheckoutRequest.ProductLineItem item : req.products()) {
-                Product product = productRepository.findByIdAndBarberId(item.productId(), principal.getUserCentreSoinId())
+                Product product = productRepository.findByIdAndUserCentreSoinId(item.productId(), principal.getUserCentreSoinId())
                         .orElseThrow(() -> new ResourceNotFoundException("Product", item.productId()));
 
                 if (product.getStockQuantity() < item.quantity()) {
@@ -138,9 +138,9 @@ public class CheckoutService {
         return saved;
     }
 
-    private String generateInvoiceNumber(Long barberId) {
-        String prefix = "INV-" + barberId + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMM")) + "-";
-        String last = invoiceRepository.findLastInvoiceNumber(barberId).orElse(prefix + "0000");
+    private String generateInvoiceNumber(Long userCentreSoinId) {
+        String prefix = "INV-" + userCentreSoinId + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMM")) + "-";
+        String last = invoiceRepository.findLastInvoiceNumber(userCentreSoinId).orElse(prefix + "0000");
         try {
             int seq = Integer.parseInt(last.substring(last.lastIndexOf('-') + 1)) + 1;
             return prefix + String.format("%04d", seq);

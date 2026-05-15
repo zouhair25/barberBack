@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ProductOrderRepository extends JpaRepository<ProductOrder, Long> {
-    Page<ProductOrder> findByBarberIdOrderByOrderDateDesc(Long barberId, Pageable pageable);
-    Optional<ProductOrder> findByIdAndBarberId(Long id, Long barberId);
+    Page<ProductOrder> findByUserCentreSoinIdOrderByOrderDateDesc(Long userCentreSoinId, Pageable pageable);
+    Optional<ProductOrder> findByIdAndUserCentreSoinId(Long id, Long userCentreSoinId);
 }

@@ -23,7 +23,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> list(@AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(productRepository.findByBarberIdAndActiveTrue(principal.getUserCentreSoinId()));
+        return ResponseEntity.ok(productRepository.findByUserCentreSoinIdAndActiveTrue(principal.getUserCentreSoinId()));
     }
 
     @PostMapping
@@ -56,7 +56,7 @@ public class ProductController {
             @Valid @RequestBody ProductRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Product product = productRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
+        Product product = productRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         product.setName(req.name());
@@ -76,7 +76,7 @@ public class ProductController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Product product = productRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
+        Product product = productRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         product.setForSale(!product.isForSale());
@@ -88,7 +88,7 @@ public class ProductController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Product product = productRepository.findByIdAndBarberId(id, principal.getUserCentreSoinId())
+        Product product = productRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         product.setActive(false);

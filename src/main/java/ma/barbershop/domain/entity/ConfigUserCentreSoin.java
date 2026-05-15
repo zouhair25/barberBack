@@ -20,6 +20,6 @@ public class ConfigUserCentreSoin {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "center_soin_id")
-    private CenterSoin centerSoin;
+    @JoinColumn(name = "user_centre_soin_id")
+    private UserCentreSoin userCentreSoin;
 }

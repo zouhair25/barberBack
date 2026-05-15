@@ -31,6 +31,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final  TypeUserRepository typeUserRepository;
 
     @Value("${app.jwt.refresh-token-expiry-ms}")
     private long refreshTokenExpiryMs;
@@ -44,6 +45,7 @@ public class AuthService {
             throw new BusinessException("Cannot self-register as ADMIN");
         }
 
+
         User user = User.builder()
                 .email(req.email())
                 .phone(req.phone())
@@ -53,13 +55,17 @@ public class AuthService {
                 .role(req.role())
                 .active(true)
                 .build();
+        /*if(req.role()!=null){
+           TypeUser typeUser = typeUserRepository.findByLabel(req.role());
+            user.setTypeUser(typeUser);
+        }*/
         user = userRepository.save(user);
 
         if (req.role() == Role.BARBER) {
             UserCentreSoin profile = UserCentreSoin.builder()
                     .user(user)
                     //.shopName(req.firstName() + " " + req.lastName())
-                    //.phone(req.phone())
+                   // .phone(req.phone())
                     .visible(true)
                     .build();
             userCentreSoinRepository.save(profile);
