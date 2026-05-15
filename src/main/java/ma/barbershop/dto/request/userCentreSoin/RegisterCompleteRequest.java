@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotNull;
 
 public record RegisterCompleteRequest(
         @NotBlank String shopName,
-        @NotNull Long ville,
+        @NotNull String ville,
         @NotNull Long userId,
-        @NotBlank String adresse,
+        @NotBlank String address,
         @NotBlank String fix
 
 ) {

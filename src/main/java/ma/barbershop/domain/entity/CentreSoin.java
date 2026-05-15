@@ -28,10 +28,9 @@ public class CentreSoin {
     @Column(name = "active", nullable = false)
     private Boolean active;
 
-    @Column(columnDefinition = "TEXT")
-    private String bio;
 
-    private String addresse;
+
+    private String address;
 
     private String quartier;
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)

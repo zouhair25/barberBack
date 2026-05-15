@@ -27,9 +27,10 @@ public class AppointmentService {
 
     @Transactional
     public Appointment book(BookAppointmentRequest req, UserPrincipal principal) {
-        UserCentreSoin barber = userCentreSoinRepository.findById(req.userCenterSoinId())
-                .orElseThrow(() -> new ResourceNotFoundException("Barber", req.userCenterSoinId()));
-
+        System.out.println("User = " + req);
+        UserCentreSoin barber = userCentreSoinRepository.findById(req.userCentreSoinId())
+                .orElseThrow(() -> new ResourceNotFoundException("Barber", req.userCentreSoinId()));
+        System.out.println("User = 2 " + barber.toString());
         BarberService service = serviceRepository.findById(req.serviceId())
                 .orElseThrow(() -> new ResourceNotFoundException("Service", req.serviceId()));
 
@@ -37,7 +38,7 @@ public class AppointmentService {
             throw new BusinessException("Service does not belong to this barber");
         }
 
-        if (!slotService.isSlotAvailable(req.userCenterSoinId(), req.startTime(), service.getDurationMin())) {
+        if (!slotService.isSlotAvailable(req.userCentreSoinId(), req.startTime(), service.getDurationMin())) {
             throw new BusinessException("Slot is not available");
         }
 
@@ -45,7 +46,7 @@ public class AppointmentService {
         LocalDateTime endTime = req.startTime().plusMinutes(service.getDurationMin());
 
         // Assign queue position
-        long queuePos = appointmentRepository.countQueueForToday(req.userCenterSoinId(), req.startTime()) + 1;
+        long queuePos = appointmentRepository.countQueueForToday(req.userCentreSoinId(), req.startTime()) + 1;
 
         Appointment apt = Appointment.builder()
                 .userCentreSoin(barber)

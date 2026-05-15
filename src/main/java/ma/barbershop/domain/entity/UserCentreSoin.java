@@ -22,23 +22,18 @@ public class UserCentreSoin {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "is_active", nullable = true)
     private boolean active = true;
 
-    @Column(name = "is_visible", nullable = false)
+    @Column(name = "is_visible", nullable = true)
     private boolean visible = true;
 
-    @Column(name = "is_confirmed",nullable = false)
+    @Column(name = "is_confirmed",nullable = true)
     private boolean confirmed = false;
 
-    @Column(name="name", nullable = false)
-    private String name;
 
-    @Column(name="fix", nullable = false)
-    private String fix;
-
-    @Column(name="adresse", nullable = false)
-    private String adresse;
+    @Column(name="fix", nullable = true)
+    private String tel;
 
     @OneToMany(mappedBy = "userCentreSoin", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default

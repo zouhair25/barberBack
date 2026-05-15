@@ -35,21 +35,22 @@ public class UserService {
     public UserCentreSoin registerComplete(RegisterCompleteRequest req) {
         User user = userRepository.findById(req.userId()).orElseThrow();
 
-        Ville ville = villeRepository.findById(req.ville()).orElseThrow();
+        Ville ville = villeRepository.findByNameContainingIgnoreCase(req.ville()).getFirst();
 
         CentreSoin centreSoin = CentreSoin.builder()
                 .shopName(req.shopName())
                 .fix(req.fix())
-                .addresse(req.adresse())
+                .address(req.address())
                 .ville(ville)
                 .active(true)
                 .build();
 
-        centreSoinRepository.save(centreSoin);
-        UserCentreSoin userCentreSoin = null;
+        centreSoin = centreSoinRepository.save(centreSoin);
+        UserCentreSoin userCentreSoin = new UserCentreSoin();
         if (user.getRole() == Role.BARBER) {
             userCentreSoin = UserCentreSoin.builder()
                     .user(user)
+                    .centreSoin(centreSoin)
                     .visible(true)
                     .build();
             userCentreSoin = userCentreSoinRepository.save(userCentreSoin);

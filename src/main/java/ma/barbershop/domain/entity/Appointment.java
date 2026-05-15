@@ -22,13 +22,12 @@ public class Appointment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_centre_soin_id", nullable = false)
+    @JoinColumn(name = "user_centre_soin_id")
     private UserCentreSoin userCentreSoin;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
     private User client;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", nullable = false)
     private BarberService service;

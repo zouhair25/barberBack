@@ -45,10 +45,6 @@ public class PublicController {
                     .orElse(null);
             map.put("id", b.getId());
             map.put("shopName", shopName);
-            /*map.put("bio", b.getBio());
-            map.put("address", b.getAddress());
-            map.put("city", b.getCity());
-            map.put("phone", b.getPhone());*/
             map.put("queueCount", queueCount);
             map.put("averageRating", avgRating != null ? Math.round(avgRating * 10.0) / 10.0 : null);
             map.put("reviewCount", reviewCount);
@@ -71,11 +67,7 @@ public class PublicController {
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("id", barber.getId());
-        /*result.put("shopName", barber.getShopName());
-        result.put("bio", barber.getBio());
-        result.put("address", barber.getAddress());
-        result.put("city", barber.getCity());
-        result.put("phone", barber.getPhone());*/
+        
         result.put("queueCount", queueCount);
         result.put("averageRating", avgRating);
         result.put("services", services.stream().map(s -> Map.of(
