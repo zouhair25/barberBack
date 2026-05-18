@@ -1,5 +1,6 @@
 package ma.barbershop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import ma.barbershop.domain.enums.Role;
@@ -61,6 +62,7 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserCentreSoin> userCentreSoins = new ArrayList<>();
 

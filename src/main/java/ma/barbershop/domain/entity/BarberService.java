@@ -1,5 +1,6 @@
 package ma.barbershop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import ma.barbershop.domain.enums.ServiceCategory;
@@ -22,6 +23,7 @@ public class BarberService {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_centre_soin_id", nullable = false)
     private UserCentreSoin userCentreSoin;

@@ -50,14 +50,14 @@ public class CheckoutController {
         Pageable pageable = PageRequest.of(page, size);
 
         return ResponseEntity.ok(invoiceRepository
-                .findByUserCentreSoinIdAndIssuedAtBetweenOrderByIssuedAtDesc(principal.getUserCentreSoinId(), f, t, pageable));
+                .findByUserCentreSoinIdAndIssuedAtBetweenOrderByIssuedAtDesc(principal.getUserCentreSoins().getFirst().getId(), f, t, pageable));
     }
 
     @GetMapping("/invoices/{id}")
     public ResponseEntity<Invoice> getInvoice(
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(invoiceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
+        return ResponseEntity.ok(invoiceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoins().getFirst().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Invoice", id)));
     }
 
@@ -66,7 +66,7 @@ public class CheckoutController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) throws IOException {
 
-        Invoice invoice = invoiceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
+        Invoice invoice = invoiceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoins().getFirst().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Invoice", id));
 
         if (invoice.getPdfUrl() == null) {

@@ -29,7 +29,7 @@ public class CheckoutService {
 
     @Transactional
     public Invoice checkout(CheckoutRequest req, UserPrincipal principal) {
-        Appointment apt = appointmentRepository.findByIdAndUserCentreSoinId(req.appointmentId(), principal.getUserCentreSoinId())
+        Appointment apt = appointmentRepository.findByIdAndUserCentreSoinId(req.appointmentId(), principal.getUserCentreSoins().getFirst().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", req.appointmentId()));
 
         if (apt.getStatus() == AppointmentStatus.COMPLETED) {
@@ -62,7 +62,7 @@ public class CheckoutService {
         // Product lines
         if (req.products() != null) {
             for (CheckoutRequest.ProductLineItem item : req.products()) {
-                Product product = productRepository.findByIdAndUserCentreSoinId(item.productId(), principal.getUserCentreSoinId())
+                Product product = productRepository.findByIdAndUserCentreSoinId(item.productId(), principal.getUserCentreSoins().getFirst().getId())
                         .orElseThrow(() -> new ResourceNotFoundException("Product", item.productId()));
 
                 if (product.getStockQuantity() < item.quantity()) {
@@ -105,7 +105,7 @@ public class CheckoutService {
         BigDecimal total = subtotal.add(taxAmount);
 
         // Invoice number
-        String invoiceNumber = generateInvoiceNumber(principal.getUserCentreSoinId());
+        String invoiceNumber = generateInvoiceNumber(principal.getUserCentreSoins().getFirst().getId());
 
         Invoice invoice = Invoice.builder()
                 .appointment(apt)

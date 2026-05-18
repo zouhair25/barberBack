@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import ma.barbershop.domain.entity.Appointment;
 import ma.barbershop.domain.enums.AppointmentStatus;
 import ma.barbershop.dto.request.appointment.*;
+import ma.barbershop.dto.response.appointment.AppointmentClientResponse;
 import ma.barbershop.security.UserPrincipal;
 import ma.barbershop.service.AppointmentService;
 import org.springframework.data.domain.*;
@@ -32,7 +33,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/user/appointments")
-    public ResponseEntity<Page<Appointment>> myAppointments(
+    public ResponseEntity<Page<AppointmentClientResponse>> myAppointments(
             @AuthenticationPrincipal UserPrincipal principal,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -58,7 +59,7 @@ public class AppointmentController {
     // ---- BARBER endpoints ----
 
     @GetMapping("/barber/appointments")
-    public ResponseEntity<List<Appointment>> barberAppointments(
+    public ResponseEntity<List<AppointmentClientResponse>> barberAppointments(
             @RequestParam(required = false) LocalDateTime from,
             @RequestParam(required = false) LocalDateTime to,
             @RequestParam(required = false) AppointmentStatus status,
@@ -71,7 +72,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/barber/appointments/today")
-    public ResponseEntity<List<Appointment>> todayQueue(@AuthenticationPrincipal UserPrincipal principal) {
+    public ResponseEntity<List<AppointmentClientResponse>> todayQueue(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(appointmentService.getTodayQueue(principal));
     }
 

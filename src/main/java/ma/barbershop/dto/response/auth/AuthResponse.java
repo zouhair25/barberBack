@@ -1,6 +1,9 @@
 package ma.barbershop.dto.response.auth;
 
+import ma.barbershop.domain.entity.UserCentreSoin;
 import ma.barbershop.domain.enums.Role;
+
+import java.util.List;
 
 public record AuthResponse(
         String accessToken,
@@ -10,5 +13,5 @@ public record AuthResponse(
         String firstName,
         String lastName,
         Role role,
-        Long userCentreSoinId
+        List<UserCentreSoin> userCentreSoins
 ) {}

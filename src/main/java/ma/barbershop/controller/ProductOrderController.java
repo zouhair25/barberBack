@@ -35,7 +35,7 @@ public class ProductOrderController {
             @RequestParam(defaultValue = "20") int size,
             @AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(orderRepository
-                .findByUserCentreSoinIdOrderByOrderDateDesc(principal.getUserCentreSoinId(), PageRequest.of(page, size)));
+                .findByUserCentreSoinIdOrderByOrderDateDesc(principal.getUserCentreSoins().getFirst().getId(), PageRequest.of(page, size)));
     }
 
     @PostMapping
@@ -44,11 +44,11 @@ public class ProductOrderController {
             @Valid @RequestBody ProductOrderRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        UserCentreSoin userCentreSoin = userCentreSoinRepository.findById(principal.getUserCentreSoinId()).orElseThrow();
+        UserCentreSoin userCentreSoin = userCentreSoinRepository.findById(principal.getUserCentreSoins().getFirst().getId()).orElseThrow();
 
         Supplier supplier = null;
         if (req.supplierId() != null) {
-            supplier = supplierRepository.findByIdAndUserCentreSoinId(req.supplierId(), principal.getUserCentreSoinId())
+            supplier = supplierRepository.findByIdAndUserCentreSoinId(req.supplierId(), principal.getUserCentreSoins().getFirst().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Supplier", req.supplierId()));
         }
 
@@ -65,7 +65,7 @@ public class ProductOrderController {
                 .build();
 
         for (ProductOrderRequest.OrderLine l : req.lines()) {
-            Product product = productRepository.findByIdAndUserCentreSoinId(l.productId(), principal.getUserCentreSoinId())
+            Product product = productRepository.findByIdAndUserCentreSoinId(l.productId(), principal.getUserCentreSoins().getFirst().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product", l.productId()));
 
             BigDecimal lineTotal = l.unitCost().multiply(BigDecimal.valueOf(l.quantityOrdered()));
@@ -90,7 +90,7 @@ public class ProductOrderController {
     public ResponseEntity<ProductOrder> get(
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
-        return ResponseEntity.ok(orderRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
+        return ResponseEntity.ok(orderRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoins().getFirst().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id)));
     }
 
@@ -101,7 +101,7 @@ public class ProductOrderController {
             @RequestBody Map<String, Object> req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        ProductOrder order = orderRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
+        ProductOrder order = orderRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoins().getFirst().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id));
 
         order.getLines().forEach(line -> {

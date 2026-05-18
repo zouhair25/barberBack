@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.UUID;
@@ -81,6 +82,12 @@ public class AuthService {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.email(), req.password()));
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        System.out.println("text ici = "+principal.toString());
+        if(principal.getUserCentreSoins() !=null){
+            principal.setUserCentreSoin(principal.getUserCentreSoins().getFirst());
+            System.out.println("text ici apres= "+principal.toString());
+
+        }
         return buildAuthResponse(principal);
     }
 
@@ -121,15 +128,18 @@ public class AuthService {
                 .revoked(false)
                 .build();
         refreshTokenRepository.save(refreshToken);
+        if(principal.getUserCentreSoins()!=null){
+            System.out.println(principal.getUserCentreSoins());
 
+        }
         return new AuthResponse(
                 accessToken,
                 rawRefreshToken,
                 principal.getId(),
                 principal.getEmail(),
-                null, null,  // will be resolved via separate user query if needed
+                principal.getFirstname(), principal.getLastname(),
                 principal.getRole(),
-                principal.getUserCentreSoinId()
+                principal.getUserCentreSoins()
         );
     }
 

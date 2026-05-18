@@ -25,7 +25,7 @@ public class BarberServiceController {
     @GetMapping
     public ResponseEntity<List<BarberService>> list(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(serviceRepository
-                .findByUserCentreSoinIdAndActiveTrueOrderByDisplayOrderAsc(principal.getUserCentreSoinId()));
+                .findByUserCentreSoinIdAndActiveTrueOrderByDisplayOrderAsc(principal.getUserCentreSoins().getFirst().getId()));
     }
 
     @PostMapping
@@ -33,7 +33,7 @@ public class BarberServiceController {
             @Valid @RequestBody ServiceRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        UserCentreSoin barber = userCentreSoinRepository.findById(principal.getUserCentreSoinId()).orElseThrow();
+        UserCentreSoin barber = userCentreSoinRepository.findById(principal.getUserCentreSoins().getFirst().getId()).orElseThrow();
 
         BarberService service = BarberService.builder()
                 .userCentreSoin(barber)
@@ -55,7 +55,7 @@ public class BarberServiceController {
             @Valid @RequestBody ServiceRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        BarberService service = serviceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
+        BarberService service = serviceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoins().getFirst().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Service", id));
 
         service.setName(req.name());
@@ -73,7 +73,7 @@ public class BarberServiceController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        BarberService service = serviceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoinId())
+        BarberService service = serviceRepository.findByIdAndUserCentreSoinId(id, principal.getUserCentreSoins().getFirst().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Service", id));
 
         service.setActive(false);

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ma.barbershop.domain.entity.*;
 import ma.barbershop.domain.enums.AppointmentStatus;
 import ma.barbershop.dto.request.appointment.*;
+import ma.barbershop.dto.response.appointment.AppointmentClientResponse;
 import ma.barbershop.exception.*;
 import ma.barbershop.repository.*;
 import ma.barbershop.security.UserPrincipal;
@@ -63,8 +64,9 @@ public class AppointmentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Appointment> getClientAppointments(UserPrincipal principal, Pageable pageable) {
-        return appointmentRepository.findByClientIdOrderByStartTimeDesc(principal.getId(), pageable);
+    public Page<AppointmentClientResponse> getClientAppointments(UserPrincipal principal, Pageable pageable) {
+        return appointmentRepository.findByClientIdOrderByStartTimeDesc(principal.getId(), pageable)
+                .map(AppointmentClientResponse::from);
     }
 
     @Transactional(readOnly = true)
@@ -98,7 +100,7 @@ public class AppointmentService {
 
     @Transactional
     public Appointment updateStatus(Long appointmentId, UpdateAppointmentStatusRequest req, UserPrincipal principal) {
-        Appointment apt = appointmentRepository.findByIdAndUserCentreSoinId(appointmentId, principal.getUserCentreSoinId())
+        Appointment apt = appointmentRepository.findByIdAndUserCentreSoinId(appointmentId, principal.getUserCentreSoins().getFirst().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", appointmentId));
 
         apt.setStatus(req.status());
@@ -106,16 +108,17 @@ public class AppointmentService {
     }
 
     @Transactional(readOnly = true)
-    public List<Appointment> getBarberAppointments(LocalDateTime from, LocalDateTime to,
-                                                    AppointmentStatus status, UserPrincipal principal) {
-        return appointmentRepository.findActiveByBarberAndDateRange(
-                principal.getUserCentreSoinId(), from, to);
+    public List<AppointmentClientResponse> getBarberAppointments(LocalDateTime from, LocalDateTime to,
+                                                            AppointmentStatus status, UserPrincipal principal) {
+        return appointmentRepository.findActiveByBarberAndDateRange(principal.getUserCentreSoin().getId(), from, to)
+                .stream().map(AppointmentClientResponse::from).toList();
     }
 
     @Transactional(readOnly = true)
-    public List<Appointment> getTodayQueue(UserPrincipal principal) {
+    public List<AppointmentClientResponse> getTodayQueue(UserPrincipal principal) {
         LocalDateTime start = LocalDateTime.now().toLocalDate().atStartOfDay();
         LocalDateTime end = start.plusDays(1);
-        return appointmentRepository.findActiveByBarberAndDateRange(principal.getUserCentreSoinId(), start, end);
+        return appointmentRepository.findActiveByBarberAndDateRange(principal.getUserCentreSoin().getId(), start, end)
+                .stream().map(AppointmentClientResponse::from).toList();
     }
 }

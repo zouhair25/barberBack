@@ -65,7 +65,7 @@ public class UserCentreSoinController {
             @Valid @RequestBody OpeningHoursRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Long userCentreSoinId = principal.getUserCentreSoinId();
+        Long userCentreSoinId = principal.getUserCentreSoins().getFirst().getId();
         openingHoursRepository.deleteByUserCentreSoinId(userCentreSoinId);
 
         UserCentreSoin barber = userCentreSoinRepository.findById(userCentreSoinId).orElseThrow();
@@ -90,7 +90,7 @@ public class UserCentreSoinController {
             @Valid @RequestBody ClosingDayRequest req,
             @AuthenticationPrincipal UserPrincipal principal) {
 
-        Long userCentreSoinId = principal.getUserCentreSoinId();
+        Long userCentreSoinId = principal.getUserCentreSoins().getFirst().getId();
         if (closingDayRepository.existsByUserCentreSoinIdAndClosedDate(userCentreSoinId, req.date())) {
             throw new BusinessException("Closing day already exists for this date");
         }
@@ -114,7 +114,7 @@ public class UserCentreSoinController {
         ClosingDay cd = closingDayRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ClosingDay", id));
 
-        if (!cd.getUserCentreSoin().getId().equals(principal.getUserCentreSoinId())) {
+        if (!cd.getUserCentreSoin().getId().equals(principal.getUserCentreSoins().getFirst().getId())) {
             throw new UnauthorizedAccessException();
         }
 

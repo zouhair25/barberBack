@@ -1,5 +1,6 @@
 package ma.barbershop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -56,6 +57,7 @@ public class CentreSoin {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "centreSoin")
     private List<UserCentreSoin> userCentreSoins;
 

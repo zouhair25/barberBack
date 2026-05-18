@@ -57,7 +57,7 @@ public class ReviewController {
 
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(reviewRepository
-                .findByUserCentreSoinIdOrderByCreatedAtDesc(principal.getUserCentreSoinId(), pageable));
+                .findByUserCentreSoinIdOrderByCreatedAtDesc(principal.getUserCentreSoins().getFirst().getId() ,pageable));
     }
 
     @PatchMapping("/barber/reviews/{id}/visibility")
@@ -68,7 +68,7 @@ public class ReviewController {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review", id));
 
-        if (!review.getUserCentreSoin().getId().equals(principal.getUserCentreSoinId())) {
+        if (!review.getUserCentreSoin().getId().equals(principal.getUserCentreSoins().getFirst().getId())) {
             throw new UnauthorizedAccessException();
         }
 
