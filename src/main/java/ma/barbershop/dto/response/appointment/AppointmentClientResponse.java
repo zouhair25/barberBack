@@ -15,7 +15,7 @@ public record AppointmentClientResponse(
         boolean reminderSent,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        ClientSummary client,
+        ClientResponse client,
         ServiceSummary service,
         UserCentreSoinSummary userCentreSoin
 ) {
@@ -30,7 +30,7 @@ public record AppointmentClientResponse(
                 a.isReminderSent(),
                 a.getCreatedAt(),
                 a.getUpdatedAt(),
-                ClientSummary.from(a.getClient()),
+                ClientResponse.from(a.getClient()),
                 ServiceSummary.from(a.getService()),
                 UserCentreSoinSummary.from(a.getUserCentreSoin())
         );

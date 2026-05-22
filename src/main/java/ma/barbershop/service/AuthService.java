@@ -20,6 +20,7 @@ import java.security.MessageDigest;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -82,12 +83,6 @@ public class AuthService {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.email(), req.password()));
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-        System.out.println("text ici = "+principal.toString());
-        if(principal.getUserCentreSoins() !=null){
-            principal.setUserCentreSoin(principal.getUserCentreSoins().getFirst());
-            System.out.println("text ici apres= "+principal.toString());
-
-        }
         return buildAuthResponse(principal);
     }
 
@@ -139,7 +134,8 @@ public class AuthService {
                 principal.getEmail(),
                 principal.getFirstname(), principal.getLastname(),
                 principal.getRole(),
-                principal.getUserCentreSoins()
+                principal.getUserCentreSoins(),
+                principal.getUserCentreSoin()
         );
     }
 

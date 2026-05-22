@@ -23,7 +23,7 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final UserCentreSoinRepository userCentreSoinRepository;
     private final BarberServiceRepository serviceRepository;
-    private final UserRepository userRepository;
+    private final ClientRepository clientRepository;
     private final SlotAvailabilityService slotService;
 
     @Transactional
@@ -43,7 +43,7 @@ public class AppointmentService {
             throw new BusinessException("Slot is not available");
         }
 
-        User client = userRepository.getReferenceById(principal.getId());
+        Client client = clientRepository.getReferenceById(principal.getId());
         LocalDateTime endTime = req.startTime().plusMinutes(service.getDurationMin());
 
         // Assign queue position
@@ -100,6 +100,9 @@ public class AppointmentService {
 
     @Transactional
     public Appointment updateStatus(Long appointmentId, UpdateAppointmentStatusRequest req, UserPrincipal principal) {
+        if (principal.getUserCentreSoins().isEmpty()) {
+            throw new BusinessException("No centre associated with this barber");
+        }
         Appointment apt = appointmentRepository.findByIdAndUserCentreSoinId(appointmentId, principal.getUserCentreSoins().getFirst().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", appointmentId));
 
@@ -110,15 +113,25 @@ public class AppointmentService {
     @Transactional(readOnly = true)
     public List<AppointmentClientResponse> getBarberAppointments(LocalDateTime from, LocalDateTime to,
                                                             AppointmentStatus status, UserPrincipal principal) {
-        return appointmentRepository.findActiveByBarberAndDateRange(principal.getUserCentreSoin().getId(), from, to)
-                .stream().map(AppointmentClientResponse::from).toList();
+        List<UserCentreSoin> centres = principal.getUserCentreSoins();
+        if (centres.isEmpty()) {
+            throw new BusinessException("No centre associated with this barber");
+        }
+        return appointmentRepository.findActiveByBarberAndDateRange(centres.getFirst().getId(), from, to)
+                .stream()
+                .map(AppointmentClientResponse::from)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public List<AppointmentClientResponse> getTodayQueue(UserPrincipal principal) {
+        List<UserCentreSoin> centres = principal.getUserCentreSoins();
+        if (centres.isEmpty()) {
+            throw new BusinessException("No centre associated with this barber");
+        }
         LocalDateTime start = LocalDateTime.now().toLocalDate().atStartOfDay();
         LocalDateTime end = start.plusDays(1);
-        return appointmentRepository.findActiveByBarberAndDateRange(principal.getUserCentreSoin().getId(), start, end)
+        return appointmentRepository.findActiveByBarberAndDateRange(centres.getFirst().getId(), start, end)
                 .stream().map(AppointmentClientResponse::from).toList();
     }
 }

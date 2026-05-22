@@ -4,7 +4,8 @@ target/*
 *.jar
 *.war
 *.ear
-
+target.*
+target*
 # IntelliJ IDEA
 .idea/
 *.iml

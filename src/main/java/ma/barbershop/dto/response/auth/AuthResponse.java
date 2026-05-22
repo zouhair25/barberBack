@@ -13,5 +13,6 @@ public record AuthResponse(
         String firstName,
         String lastName,
         Role role,
-        List<UserCentreSoin> userCentreSoins
+        List<UserCentreSoin> userCentreSoins,
+        UserCentreSoin userCentreSoin
 ) {}

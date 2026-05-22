@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,10 +33,10 @@ public class UserPrincipal implements UserDetails {
         this.active = user.isActive();
         this.firstname = user.getFirstName();
         this.lastname = user.getLastName();
-        this.userCentreSoins = (user.getUserCentreSoins() != null)
-                ? user.getUserCentreSoins()
-                : null;
-        this.userCentreSoin = null;
+        this.userCentreSoins = user.getUserCentreSoins() != null
+                ? new ArrayList<>(user.getUserCentreSoins())
+                : new ArrayList<>();
+        this.userCentreSoin = this.userCentreSoins.isEmpty() ? null : this.userCentreSoins.getFirst();
     }
 
     @Override
@@ -60,18 +61,10 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() { return active; }
 
-    public UserCentreSoin setUserCentreSoin(UserCentreSoin userCentreSoin){
-        return this.userCentreSoin = userCentreSoin;
-    }
 
 
     @Override
     public String toString() {
-        System.out.println("user = "+this.firstname+ " "+this.lastname+" "+this.id +" ");
-        this.getUserCentreSoins().forEach(
-                userCentreSoin-> System.out.println("user = "+userCentreSoin.getShopName()+ " "+userCentreSoin.getShopName()+" "+userCentreSoin.getId() +" ")
-                );
-
-        return super.toString();
+        return "UserPrincipal{id=" + id + ", email=" + email + ", role=" + role + "}";
     }
 }

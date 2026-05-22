@@ -110,7 +110,7 @@ public class CheckoutService {
         Invoice invoice = Invoice.builder()
                 .appointment(apt)
                 .userCentreSoin(apt.getUserCentreSoin())
-                .client(apt.getClient())
+                //.client(apt.getClient())
                 .invoiceNumber(invoiceNumber)
                 .issuedAt(LocalDateTime.now())
                 .subtotal(subtotal)

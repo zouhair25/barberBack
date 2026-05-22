@@ -41,7 +41,7 @@ public class NotificationService {
     }
 
     public void sendAppointmentReminder(Appointment apt) {
-        String clientPhone = apt.getClient().getPhone();
+        String clientPhone = apt.getClient().getUser().getPhone();
         if (clientPhone == null || clientPhone.isBlank()) {
             log.warn("No phone for client {}", apt.getClient().getId());
             return;
@@ -54,7 +54,7 @@ public class NotificationService {
                 barberName, time, apt.getService().getName()
         );
 
-        sendSms(apt.getClient(), apt, message);
+        //sendSms(apt.getClient(), apt, message);
     }
 
     private void sendSms(User user, Appointment apt, String message) {

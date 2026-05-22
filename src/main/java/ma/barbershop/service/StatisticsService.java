@@ -1,6 +1,8 @@
 package ma.barbershop.service;
 
 import lombok.RequiredArgsConstructor;
+import ma.barbershop.domain.entity.UserCentreSoin;
+import ma.barbershop.exception.BusinessException;
 import ma.barbershop.repository.*;
 import ma.barbershop.security.UserPrincipal;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,10 +25,12 @@ public class StatisticsService {
     public Map<String, Object> getDailyStats(UserPrincipal principal) {
         LocalDateTime start = LocalDate.now().atStartOfDay();
         LocalDateTime end = start.plusDays(1);
-        Long userCentreSoinId = principal.getUserCentreSoins().getFirst().getId();
-
-        BigDecimal revenue = invoiceRepository.sumRevenueByBarberAndPeriod(userCentreSoinId, start, end);
-        long totalAppointments = appointmentRepository.countQueueForToday(userCentreSoinId, LocalDateTime.now());
+        UserCentreSoin userCentreSoin = principal.getUserCentreSoin();
+        if(userCentreSoin ==null){
+            throw new BusinessException("No centre associated with this barber");
+        }
+        BigDecimal revenue = invoiceRepository.sumRevenueByBarberAndPeriod(userCentreSoin.getId(), start, end);
+        long totalAppointments = appointmentRepository.countQueueForToday(userCentreSoin.getId(), LocalDateTime.now());
 
         return Map.of(
                 "date", LocalDate.now(),
