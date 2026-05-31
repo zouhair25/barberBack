@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import ma.barbershop.domain.enums.AppointmentStatus;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@DynamicUpdate
 public class Appointment {
 
     @Id

@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface ClientRepository extends JpaRepository<Client,Long> {
 
-    @Query("SELECT c FROM Client JOIN FETCH c.userCentreSoin WHERE c.userCentreSoin=:userCentreSoinId ")
+    @Query("SELECT c FROM Client c WHERE c.userCentreSoin.id = :userCentreSoinId")
     Page<Client> findClientByUserCentreSoin(Long userCentreSoinId, Pageable pageable);
 }

@@ -14,7 +14,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -23,6 +23,7 @@ spring:
 
   flyway:
     enabled: false
+    locations: classpath:db/migration
     baseline-on-migrate: false
 
   mvc:

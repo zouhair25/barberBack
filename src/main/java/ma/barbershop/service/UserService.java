@@ -6,6 +6,7 @@ import ma.barbershop.domain.entity.User;
 import ma.barbershop.domain.entity.UserCentreSoin;
 import ma.barbershop.domain.entity.Ville;
 import ma.barbershop.domain.enums.Role;
+import ma.barbershop.dto.request.client.UserRequest;
 import ma.barbershop.dto.request.userCentreSoin.RegisterCompleteRequest;
 import ma.barbershop.repository.CentreSoinRepository;
 import ma.barbershop.repository.UserCentreSoinRepository;
@@ -57,6 +58,19 @@ public class UserService {
         }
 
         return userCentreSoin;
+    }
+
+    public User createUser(UserRequest userRequest){
+        User user =  User.builder()
+                .lastName(userRequest.lastName())
+                .firstName(userRequest.fistName())
+                .email(userRequest.email())
+                .phone(userRequest.phone())
+                .role(userRequest.role())
+                .active(true)
+                .build();
+        return  user;
+
     }
 
 }
