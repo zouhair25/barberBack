@@ -2,8 +2,10 @@ package ma.barbershop.service;
 
 import lombok.RequiredArgsConstructor;
 import ma.barbershop.domain.entity.*;
+import ma.barbershop.domain.enums.Role;
 import ma.barbershop.exception.ResourceNotFoundException;
 import ma.barbershop.repository.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,7 @@ public class UserCentreSoinService {
     private final VilleRepository villeRepository;
     private final QuartierRepository quartierRepository;
     private final ClientRepository clientRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserCentreSoin findUserCentreSoin(Long userCentreSoinId){
         return userCentreSoinRepository.findById(userCentreSoinId)
@@ -24,6 +27,7 @@ public class UserCentreSoinService {
     }
 
     public User findUser(Long userId){
+        Character.toU
         return userRepository.findById(userId).orElseThrow();
 
     }
@@ -34,6 +38,8 @@ public class UserCentreSoinService {
                 .firstName(firstname)
                 .lastName(lastname)
                 .phone(phone)
+                .passwordHash(passwordEncoder.encode(phone+firstname))
+                .role(Role.USER)
                 .quartier(quartier)
                 .ville(ville)
                 .build();
@@ -65,4 +71,5 @@ public class UserCentreSoinService {
                 .findFirst()
                 .orElse(null);;
     }*/
+
 }

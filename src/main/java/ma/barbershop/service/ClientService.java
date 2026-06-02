@@ -27,27 +27,26 @@ public class ClientService {
     }
 
     @Transactional
-    public Client createClient(ClientRequest request, UserPrincipal userPrincipal){
-
-        User user = this.userCentreSoinService.findUser(request.user().id());
-        if(user==null){
-           // Quartier quartier = this.userCentreSoinService.findQuartierById(request.user().quartier());
-            Ville ville = this.userCentreSoinService.findVilleByName(request.user().ville());
-            User userCreated= this.userCentreSoinService.createUser(
-                    request.user().email(),
-                    request.user().lastName(),
-                    request.user().fistName(),
-                    request.user().phone(),
+    public Client createClient(ClientRequest request, UserPrincipal userPrincipal) {
+        User user = null;
+        if (request.userId() != null) {
+            user = userRepository.findById(request.userId()).orElse(null);
+        }
+        if (user == null) {
+            Ville ville = request.villeId() != null
+                    ? userCentreSoinService.findVilleById(request.villeId())
+                    : null;
+            user = userCentreSoinService.createUser(
+                    request.email(),
+                    request.lastName(),
+                    request.firstName(),
+                    request.phone(),
                     null,
                     ville);
-            user = userCreated;
         }
-        UserCentreSoin userCentreSoin = this.userCentreSoinService.findUserCentreSoin(userPrincipal.getUserCentreSoin().getId());
-        Client client = this.userCentreSoinService.createClient(user,userCentreSoin);
-
-        return client;
-
-
+        UserCentreSoin userCentreSoin = userCentreSoinService.findUserCentreSoin(
+                userPrincipal.getUserCentreSoin().getId());
+        return userCentreSoinService.createClient(user, userCentreSoin);
     }
 
 

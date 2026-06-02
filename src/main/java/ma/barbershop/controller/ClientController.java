@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ma.barbershop.domain.entity.Client;
 import ma.barbershop.dto.request.client.ClientRequest;
-import ma.barbershop.dto.request.client.UserRequest;
 import ma.barbershop.dto.response.appointment.ClientResponse;
 import ma.barbershop.security.UserPrincipal;
 import ma.barbershop.service.ClientService;
